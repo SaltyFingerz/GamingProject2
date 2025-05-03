@@ -27,9 +27,9 @@ public class TreeWind : MonoBehaviour
     }
 
     [SerializeField] private float mediumWindAngle = 5f; // Maximum angle for medium wind
-    [SerializeField] private float strongWindAngle = 8f; // Maximum angle for strong wind
+  //  [SerializeField] private float strongWindAngle = 8f; // Maximum angle for strong wind
     [SerializeField] private float mediumWindSpeed = 1f; // Oscillation speed for medium wind
-    [SerializeField] private float strongWindSpeed = 1.5f; // Oscillation speed for strong wind
+   // [SerializeField] private float strongWindSpeed = 1.5f; // Oscillation speed for strong wind
 
     private float currentAngleRange = 0f; // Current angle range based on wind state
     private float currentOscillationSpeed = 0f; // Current oscillation speed based on wind state
@@ -55,7 +55,7 @@ public class TreeWind : MonoBehaviour
         {
             case WindState.NoWind:
                 targetAngleRange = 0f;
-                targetOscillationSpeed = 0f;
+               // targetOscillationSpeed = 0f;
                 break;
             case WindState.MediumWind:
                 targetAngleRange = mediumWindAngle;
@@ -78,6 +78,7 @@ public class TreeWind : MonoBehaviour
             currentOscillationSpeed = Mathf.Lerp(previousOscillationSpeed, targetOscillationSpeed, elapsed / duration);
             yield return null;
         }
+      
 
         // Ensure final values are set
         currentAngleRange = targetAngleRange;
@@ -86,6 +87,7 @@ public class TreeWind : MonoBehaviour
         // Update previous values for the next transition
         previousAngleRange = currentAngleRange;
         previousOscillationSpeed = currentOscillationSpeed;
+        yield return null;
     }
 
     private void OscillateTree()

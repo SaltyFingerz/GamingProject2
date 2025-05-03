@@ -17,6 +17,8 @@ public class ElementManager : MonoBehaviour
     private bool isWindCooldownActive = false; // Tracks if the cooldown is active
     private bool isMediumWindActive = false; // Tracks if medium wind is active
 
+    public static bool fireOn = false;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -60,7 +62,7 @@ public class ElementManager : MonoBehaviour
         // Stop fire if inactive for 5 seconds
         if (Time.time - lastFireTime > 5f && fireParticleSystem != null && fireParticleSystem.isPlaying)
         {
-            fireParticleSystem.Stop();
+            fireOn = false;
         }
 
         // Handle wind state transitions and stop wind if inactive for 5 seconds
@@ -78,57 +80,37 @@ public class ElementManager : MonoBehaviour
         {
             waterParticleSystem.Play();
         }
+
+        fireOn = false;
     }
 
     public void Fire()
     {
         lastFireTime = Time.time;
 
-        if (fireParticleSystem != null)
-        {
-            fireParticleSystem.Play();
-        }
+        fireOn = true;
     }
 
     public void Wind()
     {
         float currentTime = Time.time;
 
-        if (isWindStrong)
-        {
-            // If already in strong wind, reset the timer
-            lastWindTime = currentTime;
-            return;
-        }
-
-        if (isWindCooldownActive)
-        {
-            // If cooldown is active, ignore further inputs
-            return;
-        }
-
-        if (isMediumWindActive)
-        {
-            // If medium wind is active and cooldown has passed, transition to strong wind
-           // StartCoroutine(EnableStrongWind());
-        }
-        else
-        {
+    
+        
+        
+        
             // Enable medium wind and start cooldown
             lastWindTime = currentTime;
-            if (windParticleSystem != null)
-            {
-                windParticleSystem.Play();
-            }
+           
 
             EnableMediumWind();
-            StartCoroutine(StartWindCooldown());
-        }
+        
+        
     }
 
     private void EnableMediumWind()
     {
-        isWindStrong = false; // Reset strong wind state
+       
         isMediumWindActive = true; // Medium wind is now active
         TreeWind[] treeWinds = FindObjectsByType<TreeWind>(FindObjectsSortMode.None);
         foreach (var treeWind in treeWinds)
@@ -137,27 +119,9 @@ public class ElementManager : MonoBehaviour
         }
     }
 
-    private IEnumerator EnableStrongWind()
-    {
-        print("enable strong wind");    
-        isWindStrong = true;
-        isMediumWindActive = false; // Medium wind is no longer active
+  
 
-        TreeWind[] treeWinds = FindObjectsByType<TreeWind>(FindObjectsSortMode.None);
-        foreach (var treeWind in treeWinds)
-        {
-            treeWind.SetWindState(TreeWind.WindState.StrongWind);
-        }
-
-        yield return null;
-    }
-
-    private IEnumerator StartWindCooldown()
-    {
-        isWindCooldownActive = true;
-        yield return new WaitForSeconds(1f); // Cooldown duration
-        isWindCooldownActive = false;
-    }
+    
 
     private void StopWind()
     {
