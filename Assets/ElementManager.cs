@@ -18,6 +18,7 @@ public class ElementManager : MonoBehaviour
     private bool isMediumWindActive = false; // Tracks if medium wind is active
 
     public static bool fireOn = false;
+    public static bool rainOn = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -57,6 +58,7 @@ public class ElementManager : MonoBehaviour
         if (Time.time - lastWaterTime > 5f && waterParticleSystem != null && waterParticleSystem.isPlaying)
         {
             waterParticleSystem.Stop();
+            rainOn=false;
         }
 
         // Stop fire if inactive for 5 seconds
@@ -82,6 +84,7 @@ public class ElementManager : MonoBehaviour
         }
 
         fireOn = false;
+        rainOn = true;
     }
 
     public void Fire()

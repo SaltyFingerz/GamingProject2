@@ -4,6 +4,7 @@ using System.Collections;
 
 public class TreeWind : MonoBehaviour
 {
+    private Animator aC;
     public enum WindState
     {
         NoWind,
@@ -42,10 +43,27 @@ public class TreeWind : MonoBehaviour
 
     private Coroutine windTransitionCoroutine; // Tracks the current wind transition coroutine
 
+    private void Start()
+    {
+       aC=gameObject.GetComponent<Animator>();
+
+    }
+
     // Update is called once per frame
     void Update()
     {
         OscillateTree();
+        AnimateTree();
+    }
+
+    private void AnimateTree()
+    {
+        if (aC != null) 
+        { 
+        aC.SetBool("Fire", ElementManager.fireOn);
+        aC.SetBool("Rain", ElementManager.rainOn);
+        }
+
     }
 
     private IEnumerator TransitionWindState()
