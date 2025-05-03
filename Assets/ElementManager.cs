@@ -76,6 +76,7 @@ public class ElementManager : MonoBehaviour
 
     public void Water()
     {
+        print("water");
         lastWaterTime = Time.time;
 
         if (waterParticleSystem != null)

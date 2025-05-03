@@ -93,7 +93,7 @@ public class TreeWind : MonoBehaviour
         {
             elapsed += Time.deltaTime;
             currentAngleRange = Mathf.Lerp(previousAngleRange, targetAngleRange, elapsed / duration);
-            currentOscillationSpeed = Mathf.Lerp(previousOscillationSpeed, targetOscillationSpeed, elapsed / duration);
+            currentOscillationSpeed = targetOscillationSpeed;
             yield return null;
         }
       
