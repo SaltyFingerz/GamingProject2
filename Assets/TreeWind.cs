@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+
 
 public class TreeWind : MonoBehaviour
 {
@@ -14,42 +16,76 @@ public class TreeWind : MonoBehaviour
     public WindState CurrentWindState // Public property to access the wind state
     {
         get => currentWindState;
-        set => currentWindState = value;
+        set
+        {
+            if (currentWindState != value)
+            {
+                currentWindState = value;
+                StartCoroutine(TransitionWindState());
+            }
+        }
     }
 
     [SerializeField] private float mediumWindAngle = 5f; // Maximum angle for medium wind
-    [SerializeField] private float strongWindAngle = 15f; // Maximum angle for strong wind
-    [SerializeField] private float mediumWindSpeed = 2f; // Oscillation speed for medium wind
-    [SerializeField] private float strongWindSpeed = 4f; // Oscillation speed for strong wind
+    [SerializeField] private float strongWindAngle = 8f; // Maximum angle for strong wind
+    [SerializeField] private float mediumWindSpeed = 1f; // Oscillation speed for medium wind
+    [SerializeField] private float strongWindSpeed = 1.5f; // Oscillation speed for strong wind
 
     private float currentAngleRange = 0f; // Current angle range based on wind state
     private float currentOscillationSpeed = 0f; // Current oscillation speed based on wind state
 
+    private float previousAngleRange = 0f;
+    private float previousOscillationSpeed = 0f;
+
+    private float targetAngleRange = 0f;
+    private float targetOscillationSpeed = 0f;
+
+    private Coroutine windTransitionCoroutine; // Tracks the current wind transition coroutine
+
     // Update is called once per frame
     void Update()
     {
-        UpdateWindState();
         OscillateTree();
     }
 
-    private void UpdateWindState()
+    private IEnumerator TransitionWindState()
     {
-        // Adjust the angle range and oscillation speed based on the current wind state
+        // Set target values based on the current wind state
         switch (currentWindState)
         {
             case WindState.NoWind:
-                currentAngleRange = 0f;
-                currentOscillationSpeed = 0f;
+                targetAngleRange = 0f;
+                targetOscillationSpeed = 0f;
                 break;
             case WindState.MediumWind:
-                currentAngleRange = mediumWindAngle;
-                currentOscillationSpeed = mediumWindSpeed;
+                targetAngleRange = mediumWindAngle;
+                targetOscillationSpeed = mediumWindSpeed;
                 break;
-            case WindState.StrongWind:
-                currentAngleRange = strongWindAngle;
-                currentOscillationSpeed = strongWindSpeed;
-                break;
+          /*  case WindState.StrongWind:
+                targetAngleRange = strongWindAngle;
+                targetOscillationSpeed = strongWindSpeed;
+                break;*/
         }
+
+        float duration = 2f; // Transition duration in seconds
+        float elapsed = 0f;
+
+        // Gradually interpolate the values over the duration
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            currentAngleRange = Mathf.Lerp(previousAngleRange, targetAngleRange, elapsed / duration);
+            currentOscillationSpeed = Mathf.Lerp(previousOscillationSpeed, targetOscillationSpeed, elapsed / duration);
+            yield return null;
+        }
+
+        // Ensure final values are set
+        currentAngleRange = targetAngleRange;
+        currentOscillationSpeed = targetOscillationSpeed;
+
+        // Update previous values for the next transition
+        previousAngleRange = currentAngleRange;
+        previousOscillationSpeed = currentOscillationSpeed;
     }
 
     private void OscillateTree()
@@ -73,6 +109,8 @@ public class TreeWind : MonoBehaviour
     // Public method to set the wind state
     public void SetWindState(WindState newWindState)
     {
-        currentWindState = newWindState;
+        previousAngleRange = currentAngleRange;
+        previousOscillationSpeed = currentOscillationSpeed;
+        CurrentWindState = newWindState;
     }
 }

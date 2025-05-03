@@ -51,6 +51,12 @@ MonoBehaviour:
   - {r: 0, g: 1, b: 0, a: 1}
   - {r: 0, g: 0, b: 1, a: 1}
   - {r: 1, g: 0, b: 1, a: 1}
+  OnSelection:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDeselection:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!198 &2124833429459617382
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -4792,6 +4798,9 @@ ParticleSystemRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

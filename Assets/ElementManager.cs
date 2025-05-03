@@ -110,7 +110,7 @@ public class ElementManager : MonoBehaviour
         if (isMediumWindActive)
         {
             // If medium wind is active and cooldown has passed, transition to strong wind
-            StartCoroutine(EnableStrongWind());
+           // StartCoroutine(EnableStrongWind());
         }
         else
         {
@@ -139,6 +139,7 @@ public class ElementManager : MonoBehaviour
 
     private IEnumerator EnableStrongWind()
     {
+        print("enable strong wind");    
         isWindStrong = true;
         isMediumWindActive = false; // Medium wind is no longer active
 

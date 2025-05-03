@@ -117,6 +117,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4815401999689941577, guid: 9c121a71dbbcc144591305e70b528c27, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key0.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4815401999689941577, guid: 9c121a71dbbcc144591305e70b528c27, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key0.g
+      value: 0.23935056
+      objectReference: {fileID: 0}
+    - target: {fileID: 4815401999689941577, guid: 9c121a71dbbcc144591305e70b528c27, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key0.r
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6361056508595615867, guid: 9c121a71dbbcc144591305e70b528c27, type: 3}
       propertyPath: IsTrainingObject
       value: 1
@@ -252,6 +264,18 @@ PrefabInstance:
     - target: {fileID: 2635866924714643950, guid: 9c121a71dbbcc144591305e70b528c27, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4815401999689941577, guid: 9c121a71dbbcc144591305e70b528c27, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key0.b
+      value: 0.98350674
+      objectReference: {fileID: 0}
+    - target: {fileID: 4815401999689941577, guid: 9c121a71dbbcc144591305e70b528c27, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key0.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4815401999689941577, guid: 9c121a71dbbcc144591305e70b528c27, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key0.r
+      value: 0.7688679
       objectReference: {fileID: 0}
     - target: {fileID: 6361056508595615867, guid: 9c121a71dbbcc144591305e70b528c27, type: 3}
       propertyPath: ClassId
@@ -425,6 +449,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1413589433977423575}
     m_Modifications:
+    - target: {fileID: 1112777264625839909, guid: be6f48600d4e8574a818f7fca402f078, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
+      objectReference: {fileID: 0}
+    - target: {fileID: 1624167825108836584, guid: be6f48600d4e8574a818f7fca402f078, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
+      objectReference: {fileID: 0}
     - target: {fileID: 2355937673857049774, guid: be6f48600d4e8574a818f7fca402f078, type: 3}
       propertyPath: m_Name
       value: ERPParadigm_UI
@@ -982,6 +1014,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4815401999689941577, guid: 9c121a71dbbcc144591305e70b528c27, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key0.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4815401999689941577, guid: 9c121a71dbbcc144591305e70b528c27, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key0.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4815401999689941577, guid: 9c121a71dbbcc144591305e70b528c27, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key0.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6361056508595615867, guid: 9c121a71dbbcc144591305e70b528c27, type: 3}
       propertyPath: ClassId
       value: 2
@@ -1008,6 +1052,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6052125540637080337}
     m_Modifications:
+    - target: {fileID: 17462448996983145, guid: 9354fc4cbc0dbe94c8ef54114fa75512, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
+      objectReference: {fileID: 0}
+    - target: {fileID: 2379434795878080413, guid: 9354fc4cbc0dbe94c8ef54114fa75512, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
+      objectReference: {fileID: 0}
     - target: {fileID: 6667627959556343090, guid: 9354fc4cbc0dbe94c8ef54114fa75512, type: 3}
       propertyPath: m_Name
       value: DeviceDialog_UI
