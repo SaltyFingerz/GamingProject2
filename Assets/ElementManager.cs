@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using System.Collections;
 public class ElementManager : MonoBehaviour
 {
     // Particle systems for each element
@@ -10,9 +10,12 @@ public class ElementManager : MonoBehaviour
     private ParticleSystem.EmissionModule fireEmission;
     private ParticleSystem.ShapeModule waterShape;
 
-    private bool isWindActive = false; // Tracks if wind is active
-    private float windOscillationSpeed = 2f; // Speed of oscillation
-    private float windOscillationAngle = 15f; // Maximum angle of oscillation
+    private float lastWaterTime = 0f; // Tracks the last time Water() was called
+    private float lastFireTime = 0f; // Tracks the last time Fire() was called
+    private float lastWindTime = 0f; // Tracks the last time Wind() was called
+    private bool isWindStrong = false; // Tracks if wind is in the strong state
+    private bool isWindCooldownActive = false; // Tracks if the cooldown is active
+    private bool isMediumWindActive = false; // Tracks if medium wind is active
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -34,28 +37,53 @@ public class ElementManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isWindActive && waterParticleSystem != null && waterParticleSystem.isPlaying)
+        // Check for key presses to trigger element functions
+        if (Input.GetKeyDown(KeyCode.W))
         {
-            OscillateWaterAngle();
+            Wind();
+        }
+        else if (Input.GetKeyDown(KeyCode.F))
+        {
+            Fire();
+        }
+        else if (Input.GetKeyDown(KeyCode.Q))
+        {
+            Water();
+        }
+
+        // Stop water if inactive for 5 seconds
+        if (Time.time - lastWaterTime > 5f && waterParticleSystem != null && waterParticleSystem.isPlaying)
+        {
+            waterParticleSystem.Stop();
+        }
+
+        // Stop fire if inactive for 5 seconds
+        if (Time.time - lastFireTime > 5f && fireParticleSystem != null && fireParticleSystem.isPlaying)
+        {
+            fireParticleSystem.Stop();
+        }
+
+        // Handle wind state transitions and stop wind if inactive for 5 seconds
+        if (Time.time - lastWindTime > 5f && isMediumWindActive)
+        {
+            StopWind();
         }
     }
 
     public void Water()
     {
+        lastWaterTime = Time.time;
+
         if (waterParticleSystem != null)
         {
             waterParticleSystem.Play();
-        }
-
-        // Gradually reduce fire emission rate
-        if (fireParticleSystem != null)
-        {
-            StartCoroutine(GraduallyReduceFireEmission());
         }
     }
 
     public void Fire()
     {
+        lastFireTime = Time.time;
+
         if (fireParticleSystem != null)
         {
             fireParticleSystem.Play();
@@ -64,52 +92,86 @@ public class ElementManager : MonoBehaviour
 
     public void Wind()
     {
+        float currentTime = Time.time;
+
+        if (isWindStrong)
+        {
+            // If already in strong wind, reset the timer
+            lastWindTime = currentTime;
+            return;
+        }
+
+        if (isWindCooldownActive)
+        {
+            // If cooldown is active, ignore further inputs
+            return;
+        }
+
+        if (isMediumWindActive)
+        {
+            // If medium wind is active and cooldown has passed, transition to strong wind
+            StartCoroutine(EnableStrongWind());
+        }
+        else
+        {
+            // Enable medium wind and start cooldown
+            lastWindTime = currentTime;
+            if (windParticleSystem != null)
+            {
+                windParticleSystem.Play();
+            }
+
+            EnableMediumWind();
+            StartCoroutine(StartWindCooldown());
+        }
+    }
+
+    private void EnableMediumWind()
+    {
+        isWindStrong = false; // Reset strong wind state
+        isMediumWindActive = true; // Medium wind is now active
+        TreeWind[] treeWinds = FindObjectsByType<TreeWind>(FindObjectsSortMode.None);
+        foreach (var treeWind in treeWinds)
+        {
+            treeWind.SetWindState(TreeWind.WindState.MediumWind);
+        }
+    }
+
+    private IEnumerator EnableStrongWind()
+    {
+        isWindStrong = true;
+        isMediumWindActive = false; // Medium wind is no longer active
+
+        TreeWind[] treeWinds = FindObjectsByType<TreeWind>(FindObjectsSortMode.None);
+        foreach (var treeWind in treeWinds)
+        {
+            treeWind.SetWindState(TreeWind.WindState.StrongWind);
+        }
+
+        yield return null;
+    }
+
+    private IEnumerator StartWindCooldown()
+    {
+        isWindCooldownActive = true;
+        yield return new WaitForSeconds(1f); // Cooldown duration
+        isWindCooldownActive = false;
+    }
+
+    private void StopWind()
+    {
+        isWindStrong = false;
+        isMediumWindActive = false;
+
+        TreeWind[] treeWinds = FindObjectsByType<TreeWind>(FindObjectsSortMode.None);
+        foreach (var treeWind in treeWinds)
+        {
+            treeWind.SetWindState(TreeWind.WindState.NoWind);
+        }
+
         if (windParticleSystem != null)
         {
-            windParticleSystem.Play();
+            windParticleSystem.Stop();
         }
-
-        // Increase fire emission rate
-        if (fireParticleSystem != null)
-        {
-            AmplifyFireEmission();
-        }
-
-        // Activate wind effect on water
-        if (waterParticleSystem != null && waterParticleSystem.isPlaying)
-        {
-            isWindActive = true;
-        }
-    }
-
-    private System.Collections.IEnumerator GraduallyReduceFireEmission()
-    {
-        float targetRate = 0f;
-        float duration = 2f; // Time in seconds to fully stop emission
-        float initialRate = fireEmission.rateOverTime.constant;
-
-        float elapsed = 0f;
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            float newRate = Mathf.Lerp(initialRate, targetRate, elapsed / duration);
-            fireEmission.rateOverTime = newRate;
-            yield return null;
-        }
-
-        fireEmission.rateOverTime = targetRate;
-    }
-
-    private void AmplifyFireEmission()
-    {
-        float amplificationFactor = 2f; // Increase emission rate by this factor
-        float currentRate = fireEmission.rateOverTime.constant;
-        fireEmission.rateOverTime = currentRate * amplificationFactor;
-    }
-
-    private void OscillateWaterAngle()
-    {
-        float angle = Mathf.Sin(Time.time * windOscillationSpeed) * windOscillationAngle;
-        waterShape.rotation = new Vector3(angle, 0f, 0f);
     }
 }

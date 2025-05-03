@@ -9,7 +9,14 @@ public class TreeWind : MonoBehaviour
         StrongWind
     }
 
-    [SerializeField] private WindState currentWindState = WindState.NoWind; // Public variable to set wind state
+    [SerializeField] private WindState currentWindState = WindState.NoWind; // Private field with SerializeField for Inspector access
+
+    public WindState CurrentWindState // Public property to access the wind state
+    {
+        get => currentWindState;
+        set => currentWindState = value;
+    }
+
     [SerializeField] private float mediumWindAngle = 5f; // Maximum angle for medium wind
     [SerializeField] private float strongWindAngle = 15f; // Maximum angle for strong wind
     [SerializeField] private float mediumWindSpeed = 2f; // Oscillation speed for medium wind
@@ -63,7 +70,7 @@ public class TreeWind : MonoBehaviour
         }
     }
 
-    // Public method to set the wind state (optional, can also be set via the Inspector)
+    // Public method to set the wind state
     public void SetWindState(WindState newWindState)
     {
         currentWindState = newWindState;
